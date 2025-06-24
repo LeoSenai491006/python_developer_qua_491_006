@@ -1,11 +1,15 @@
-# importando bibliotecals
+# importando bibliotecas
 import os
 import datetime
 from datetime import date
 
+# função para limpar a tela
+def limpa_tela():
+    os.system("cls" if os.name == "nt" else "clear")
+
 # entrada de dados
-nome = (input("Digite seu nome: "))
-idade = (input("Digite sua idade: "))
+nome = input("Digite seu nome: ")
+idade = int(input("Digite sua idade: "))
 
 # laço de repetição
 while True:
@@ -17,28 +21,63 @@ while True:
     print("- Sala 4: As Tranças do Rei Careca - 16 anos")
     print("- Sala 5: A Vingança do Peixe Frito - 18 anos\n")
 
-    opcao = print(input("Informe o numero da sala desejada: ")).strip()
+    opcao = input("Informe o número da sala desejada: ").strip()
+    data = date.today().strftime("%d/%m/%Y")
+    hora = datetime.datetime.now().strftime("%H:%M:%S")
+    hora_data = f"{hora} - {data}\n"
 
     match opcao:
         case "1":
-            
-
-
-
-
-
-
-
-"""
-TODO - atividade: Crie um programa que recebe do usuário o nome e a idade, e em seguida, mostre um menu de filmes com suas respectivas classificações indicativas e
-salas de exibição. Exemplo:
-- Sala 1: A roda Quadrada - Livre
-- Sala 2: A volta dos que Não Foram - 12 anos
-- Sala 3: Poeira em Alto Mar - 14 anos
-- Sala 4: As Tranças do Rei Careca - 16 anos
-- Sala 5: A Vingança do Peixe Frito - 18 anos
-O usuário deve escolher a sala que está passando o filme que deseja assistir.
-Se o usuário tiver a idade mínima ou mais para ver o filme, o program imprime o ingresso com o nome do usuário, a sala, o nome do filme, a data e a
-hora da compra do ingresso, e deseje um bom filme, e em seguida encerra o programa.
-- Se o usuário não tiver a idade mínima para ver o filme, o programa bloqueia a sua entrada, e re-exibe o menu de filmes para que ele escolha outro filme.
-"""
+            print(f"\nINGRESSO para {nome}.\n")
+            print("Sala 1: A roda Quadrada.")
+            print(hora_data)
+            print("Tenha um bom filme.")
+            break
+        case "2":
+            if idade >= 12:
+                print(f"\nINGRESSO para {nome}.\n")
+                print("Sala 2: A volta dos que Não Foram.")
+                print(hora_data)
+                print("Tenha um bom filme.")
+                break
+            else:
+                print("\nEntrada bloqueada devido à classificação indicativa. Escolha outro filme.")
+                input("Pressione ENTER para continuar...")
+                limpa_tela()
+        case "3":
+            if idade >= 14:
+                print(f"\nINGRESSO para {nome}.\n")
+                print("Sala 3: Poeira em Alto Mar.")
+                print(hora_data)
+                print("Tenha um bom filme.")
+                break
+            else:
+                print("\nEntrada bloqueada devido à classificação indicativa. Escolha outro filme.")
+                input("Pressione ENTER para continuar...")
+                limpa_tela()
+        case "4":
+            if idade >= 16:
+                print(f"\nINGRESSO para {nome}.\n")
+                print("Sala 4: As Tranças do Rei Careca.")
+                print(hora_data)
+                print("Tenha um bom filme.")
+                break
+            else:
+                print("\nEntrada bloqueada devido à classificação indicativa. Escolha outro filme.")
+                input("Pressione ENTER para continuar...")
+                limpa_tela()
+        case "5":
+            if idade >= 18:
+                print(f"\nINGRESSO para {nome}.\n")
+                print("Sala 5: A Vingança do Peixe Frito.")
+                print(hora_data)
+                print("Tenha um bom filme.")
+                break
+            else:
+                print("\nEntrada bloqueada devido à classificação indicativa. Escolha outro filme.")
+                input("Pressione ENTER para continuar...")
+                limpa_tela()
+        case _:
+            print("\nOpção inválida. Tente novamente.")
+            input("Pressione ENTER para continuar...")
+            limpa_tela()
