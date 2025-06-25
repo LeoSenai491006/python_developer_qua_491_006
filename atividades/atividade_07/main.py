@@ -15,37 +15,59 @@ while True:
     if opcao == "1":
         nome = input("Digite o nome: ").title().strip()
         nomes.append(nome)
-        print("Nome cadastrado com sucesso!")
+        print("Nome cadastrado com sucesso!\n")
 
     elif opcao == "2":
-        for i in range(len(nomes)):
-            print(f"{i}: {nomes[i]}.")
-    
-    elif opcao == "3":
-        nome = input("Digite o nome a ser pesquisado: ").title().strip()
-        if nome in nomes:
-            print(f"{nome} está na lista!")
+        if len(nomes) == 0:
+            print("A lista está vazia.\n")
         else:
-            print(f"{nome} não foi encontrado.")
-    
+            for i in range(len(nomes)):
+                print(f"Índice {i}: {nomes[i]}")
+            print()
+
+    elif opcao == "3":
+        nome_pesquisa = input("Digite o nome que deseja pesquisar: ").title().strip()
+        if nome_pesquisa in nomes:
+            print(f"Nome encontrado no índice {nomes.index(nome_pesquisa)}.\n")
+        else:
+            print("Nome não encontrado.\n")
+
     elif opcao == "4":
-        try:
-            ...
-        except Exception as e:
-            print("Erro ao alterar o nome: {e}.")
+        if len(nomes) == 0:
+            print("A lista está vazia. Nada para alterar.\n")
+        else:
+            for i in range(len(nomes)):
+                print(f"Índice {i}: {nomes[i]}")
+            try:
+                indice = int(input("Informe o índice do nome a ser alterado: "))
+                if indice >= 0 and indice < len(nomes):
+                    novo_nome = input("Digite o novo nome: ").title().strip()
+                    nomes[indice] = novo_nome
+                    print("Nome alterado com sucesso!\n")
+                else:
+                    print("Índice inválido.\n")
+            except Exception as e:
+                print(f"Ocorreu um erro: {e}\n")
 
+    elif opcao == "5":
+        if len(nomes) == 0:
+            print("A lista está vazia. Nada para excluir.\n")
+        else:
+            for i in range(len(nomes)):
+                print(f"Índice {i}: {nomes[i]}")
+            try:
+                indice = int(input("Informe o índice do nome a ser excluído: "))
+                if indice >= 0 and indice < len(nomes):
+                    excluido = nomes.pop(indice)
+                    print(f"Nome '{excluido}' excluído com sucesso!\n")
+                else:
+                    print("Índice inválido.\n")
+            except Exception as e:
+                print(f"Ocorreu um erro: {e}\n")
 
+    elif opcao == "6":
+        print("Saindo do programa...")
+        break
 
-
-
-
-"""
-# TODO - atividade: Crie um programa que faça as seguinte operações:
-- Cadastre novo nome na lista
-- Liste todos os nome da lista
-- Pesquise por um nome na lista
-- Altere um nome na lista
-- Exclua um nome na lista
-- Sair do programa
-# NOTE - a lista deve começar vazia. Exemplo: lista = []
-"""
+    else:
+        print("Opção inválida. Tente novamente.\n")
