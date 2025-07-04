@@ -2,34 +2,68 @@ import json
 import os
 
 usuarios = []
+arquivo = ""
+diretorio = "."
 
 while True:
     print(f"\n{'-'*20} MENU {'-'*20}\n")
     print("1 - Criar novo arquivo.")
-    print("2 - Informe o diretório que deseja salvar o arquivo.")
-    print("3 - Abrir arquivo.")
-    print("4 - Cadastrar novo usuário.")
-    print("5 - Listar usuários.")
-    print("6 - Pesquisar usuário.")
-    print("7 - Alterar dados de um usuário.")
-    print("8 - Deletar um usuário")
-    print("9 - Sair do programa")
+    print("2 - Abrir arquivo.")
+    print("3 - Cadastrar novo usuário.")
+    print("4 - Listar usuários.")
+    print("5 - Pesquisar usuário.")
+    print("6 - Alterar dados de um usuário.")
+    print("7 - Deletar um usuário.")
+    print("8 - Sair do programa")
     opcao = input("Informe uma opção: ")
     os.system("cls" if os.name == "nt" else "clear")
+
     match opcao:
         case "1":
-            ...
+            try:
+                nome_arquivo = input("Informe o nome do novo arquivo (sem extensão): ").strip().lower()
+                diretorio = input("Informe o diretório onde deseja salvar o arquivo: ").strip()
+
+                if not os.path.exists(diretorio):
+                    criar = input(f"Diretório '{diretorio}' não existe. Deseja criá-lo? (s/n): ").strip().lower()
+                    if criar == "s":
+                        os.makedirs(diretorio)
+                        print("Diretório criado com sucesso.")
+                    else:
+                        print("Voltando ao diretório padrão.")
+                        diretorio = "."
+
+                caminho_arquivo = os.path.join(diretorio, f"{nome_arquivo}.json")
+
+                with open(caminho_arquivo, "w", encoding="utf-8") as f:
+                    json.dump([], f, ensure_ascii=False, indent=4)
+
+                print(f"Arquivo '{nome_arquivo}.json' criado com sucesso em '{diretorio}'.")
+                arquivo = nome_arquivo
+
+            except Exception as e:
+                print(f"Erro ao criar o arquivo. {e}")
+            continue
+
         case "2":
-            ...
+            try:
+                arquivo = input("Informe o nome do arquivo (sem extensão): ").strip().lower()
+                with open(f"{diretorio}/{arquivo}.json", "r", encoding="utf-8") as f:
+                    usuarios = json.load(f)
+                print("Arquivo carregado com sucesso\n")
+                print(f"{'-'*20} USUÁRIOS {'-'*20}\n")
+                for usuario in usuarios:
+                    for chave in usuario:
+                        print(f"{chave.capitalize()}: {usuario.get(chave)}")
+                    print("-"*40)
+
+            except Exception as e:
+                print(f"Não foi possível abrir o arquivo JSON. {e}.")
+            continue
+
         case "3":
-            ...
-        case "4":
-
-            # TODO - logo após fazer esse cadastro, salvar os dados no arquivo JSON e fazer um try com except
-
-            while True:
+            try:
                 usuario = {}
-
                 usuario['nome'] = input("Informe o nome: ").strip().title()
                 usuario['data_nasc'] = input("Informe a data de nascimento: ").strip().replace(".", "/")
                 usuario['cpf'] = input("Informe o CPF: ").strip()
@@ -37,31 +71,129 @@ while True:
                 usuario['telefone'] = input("Informe o telefone: ").strip()
                 usuario['filme'] = input("Informe seu filme favorito: ").strip().title()
 
+                with open(f"{diretorio}/{arquivo}.json", "r", encoding="utf-8") as f:
+                    usuarios = json.load(f)
+
                 usuarios.append(usuario)
-                os.system("cls" if os.name == "nt" else "clear")
 
-            print("Usuário cadastrado com sucesso!")
+                with open(f"{diretorio}/{arquivo}.json", "w", encoding="utf-8") as f:
+                    json.dump(usuarios, f, ensure_ascii=False, indent=4)
+
+                print("Usuário cadastrado com sucesso!")
+
+            except Exception as e:
+                print(f"Erro ao cadastrar usuário. {e}")
             continue
-        case "5":
 
-            # FIXME - completar o código
+        case "4":
+            try:
+                with open(f"{diretorio}/{arquivo}.json", "r", encoding="utf-8") as f:
+                    usuarios = json.load(f)
 
-            with open(f"{arquivo}.json", "r", encoding="utf-8") as f:
-                usuarios = json.load(f)
-
-            print(f"\n{'-'*20} LISTA DE PESSOAS {'-'*20}"\n)
+                print(f"\n{'-'*20} LISTA DE PESSOAS {'-'*20}\n")
                 for usuario in usuarios:
-                    print(f"{chave.capitalize()}: {usuario.get(chave)}")
-                print("-"*40)
+                    for chave in usuario:
+                        print(f"{chave.capitalize()}: {usuario.get(chave)}")
+                    print("-"*40)
+
+            except Exception as e:
+                print(f"Erro ao listar usuários. {e}.")
+            continue
+
+        case "5":
+            try:
+                chave = input("Informe o campo para pesquisa (nome, cpf, email, etc): ").strip().lower()
+                valor = input("Informe o valor a ser pesquisado: ").strip()
+
+                with open(f"{diretorio}/{arquivo}.json", "r", encoding="utf-8") as f:
+                    usuarios = json.load(f)
+
+                encontrados = []
+
+                for usuario in usuarios:
+                    if chave in usuario and str(usuario[chave]).lower() == valor.lower():
+                        encontrados.append(usuario)
+
+                if encontrados:
+                    print(f"\n{'-'*20} RESULTADOS DA PESQUISA {'-'*20}\n")
+                    for usuario in encontrados:
+                        for chave_usuario in usuario:
+                            print(f"{chave_usuario.capitalize()}: {usuario.get(chave_usuario)}")
+                        print("-"*40)
+                else:
+                    print("Nenhum usuário encontrado com esse critério.")
+
+            except Exception as e:
+                print(f"Não foi possível pesquisar. {e}.")
+            continue
+
         case "6":
-            ...
+            try:
+                cpf_alvo = input("Informe o CPF do usuário que deseja alterar: ")
+
+                with open(f"{diretorio}/{arquivo}.json", "r", encoding="utf-8") as f:
+                    usuarios = json.load(f)
+
+                encontrado = False
+
+                for usuario in usuarios:
+                    if usuario["cpf"] == cpf_alvo:
+                        print("\nUsuário encontrado: ")
+                        for chave in usuario:
+                            print(f"{chave.capitalize()}: {usuario.get(chave)}")
+                        print("-"*40)
+
+                        usuario['nome'] = input("Informe o nome: ").strip().title()
+                        usuario['data_nasc'] = input("Informe a data de nascimento: ").strip().replace(".", "/")
+                        usuario['cpf'] = input("Informe o CPF: ").strip()
+                        usuario['email'] = input("Informe o e-mail: ").strip().lower()
+                        usuario['telefone'] = input("Informe o telefone: ").strip()
+                        usuario['filme'] = input("Informe seu filme favorito: ").strip().title()
+
+                        encontrado = True
+                        break
+
+                if encontrado:
+                    with open(f"{diretorio}/{arquivo}.json", "w", encoding="utf-8") as f:
+                        json.dump(usuarios, f, ensure_ascii=False, indent=4)
+                    print("Dados atualizados com sucesso.")
+                else:
+                    print("CPF não encontrado.")
+
+            except Exception as e:
+                print(f"Erro ao alterar usuário. {e}.")
+            continue
+
         case "7":
-            ...
+            try:
+                cpf_alvo = input("Informe o CPF do usuário que deseja deletar: ").strip()
+
+                encontrado = False
+
+                with open(f"{diretorio}/{arquivo}.json", "r", encoding="utf-8") as f:
+                    usuarios = json.load(f)
+
+                for i in range(len(usuarios)):
+                    if usuarios[i]["cpf"] == cpf_alvo:
+                        del usuarios[i]
+                        encontrado = True
+                        break
+
+                if encontrado:
+                    with open(f"{diretorio}/{arquivo}.json", "w", encoding="utf-8") as f:
+                        json.dump(usuarios, f, ensure_ascii=False, indent=4)
+                    print("Usuário removido com sucesso.")
+                else:
+                    print("CPF não encontrado.")
+
+            except Exception as e:
+                print(f"Erro ao deletar usuário. {e}.")
+            continue
+
         case "8":
-            ...
-        case "9":
             print("Programa encerrado.\n")
             break
+
         case _:
             print("Opção inválida.")
             continue
