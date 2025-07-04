@@ -47,15 +47,20 @@ while True:
 
         case "2":
             try:
+                diretorio = input("Informe o diretório onde o arquivo está salvo: ").strip()
+                if not os.path.exists(diretorio):
+                    print("Diretório não encontrado. Voltando ao diretório padrão.")
+                    diretorio = "."
+
                 arquivo = input("Informe o nome do arquivo (sem extensão): ").strip().lower()
-                with open(f"{diretorio}/{arquivo}.json", "r", encoding="utf-8") as f:
+                caminho_arquivo = f"{diretorio}/{arquivo}.json"
+
+                with open(caminho_arquivo, "r", encoding="utf-8") as f:
                     usuarios = json.load(f)
-                print("Arquivo carregado com sucesso\n")
-                print(f"{'-'*20} USUÁRIOS {'-'*20}\n")
-                for usuario in usuarios:
-                    for chave in usuario:
-                        print(f"{chave.capitalize()}: {usuario.get(chave)}")
-                    print("-"*40)
+
+                os.system("cls" if os.name == "nt" else "clear")
+
+                print(f"\nArquivo '{arquivo}.json' carregado com sucesso.")
 
             except Exception as e:
                 print(f"Não foi possível abrir o arquivo JSON. {e}.")
